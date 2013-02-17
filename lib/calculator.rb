@@ -5,16 +5,13 @@ class String
 end
 
 module Skipper
-  def self.no_whitespace(f)
-    repeatForever &f
+  def self.no_whitespace(&f)
+    repeatForever yield, &f
   end
 
-  def self.repeatForever
-    while true do
-      if (result = yield) != ' '
-        return result
-      end
-    end
+  def self.repeatForever(value, &f)
+    return value if value != ' '
+    repeatForever yield, &f
   end
 end
 

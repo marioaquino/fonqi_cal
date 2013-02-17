@@ -22,7 +22,7 @@ describe 'function of whitespace skippiness' do
   it 'returns immediately if it receives nil' do
     callCount = 0
     input = lambda { callCount += 1; nil }
-    Skipper.no_whitespace(input).should == nil
+    Skipper.no_whitespace(&input).should == nil
     callCount.should == 1
   end
 
@@ -32,20 +32,17 @@ describe 'function of whitespace skippiness' do
       callCount += 1
       callCount <= 14 ? " " : "X"
     end
-    Skipper.no_whitespace(input).should == "X"
+    Skipper.no_whitespace(&input).should == "X"
     callCount.should == 15
   end
 
   it 'calls it twice if the first return is a space' do
     callCount = 0
-    input = lambda { callCount += 1;
-      if callCount == 1
-        " "
-      else
-        "X"
-      end
-    }
-    Skipper.no_whitespace(input)
+    input = lambda do
+      callCount += 1;
+      callCount == 1 ? " " : "X"
+    end
+    Skipper.no_whitespace(&input)
     callCount.should == 2
   end
 end
