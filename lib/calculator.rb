@@ -28,16 +28,11 @@ end
 module Calculator
   def self.evaluate(expression)
     enum = ExpressionEnumerator.for expression
-    left = enum.next
-    op = case enum.next
-    when "+"
-      proc {|a, b| a + b }
-    when "-"
-      proc {|a, b| a - b }
-    else
-      raise ArgumentError
-    end
-    right = enum.next
-    op.call left.to_i, right.to_i
+    calc *enum.take(3)
+  end
+
+  def self.calc(left, oper, right)
+    raise ArgumentError unless oper =~ /[+-]/
+    left.to_i.send oper, right.to_i
   end
 end
