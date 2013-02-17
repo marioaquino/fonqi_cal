@@ -18,6 +18,27 @@ describe 'Stringpop' do
   end
 end
 
+describe 'Expression Enumerator' do
+  let(:expression) { '2 + 4' }
+
+  subject { ExpressionEnumerator.for expression }
+
+  it 'returns the first part of the expression on the first next' do
+    subject.next.should == '2'
+  end
+
+  it 'skips whitespace and returns the second component of the expression after two nexts' do
+    subject.next
+    subject.next.should == '+'
+  end
+
+  it 'returns the last component of a three part expression on the third next' do
+    subject.next
+    subject.next
+    subject.next.should == '4'
+  end
+end
+
 describe 'function of whitespace skippiness' do
   it 'returns immediately if it receives nil' do
     callCount = 0

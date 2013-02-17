@@ -15,11 +15,21 @@ module Skipper
   end
 end
 
+module ExpressionEnumerator
+  def self.for(expression)
+    Enumerator.new do |yielder|
+      loop do
+        yielder << Skipper.no_whitespace { expression.pop }
+      end
+    end
+  end
+end
+
 module Calculator
   def self.evaluate(expression)
-    firstArg = expression.pop
-    expression.pop
-    op = case expression.pop
+    enum = ExpressionEnumerator.for expression
+    left = enum.next
+    op = case enum.next
     when "+"
       proc {|a, b| a + b }
     when "-"
@@ -27,9 +37,7 @@ module Calculator
     else
       raise ArgumentError
     end
-    expression.pop
-    result = op.call(firstArg.to_i,expression.pop.to_i)
-    puts "\n#{expression} = #{result}"
-    result
+    right = enum.next
+    op.call left.to_i, right.to_i
   end
 end
