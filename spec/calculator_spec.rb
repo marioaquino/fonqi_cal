@@ -1,16 +1,19 @@
 require_relative '../lib/calculator'
 
-describe 'Stringpop' do
+describe 'Popping a string' do
   context 'valid string for popping' do
+    subject { "Blah" }
+
     it 'returns the first character of the string' do
-      "Blah".pop.should == "B"
+      subject.pop.should == "B"
     end
+
     it 'strips the first character from the string' do
-      blah="Blah"
-      blah.pop
-      blah.should == "lah"
+      subject.pop
+      subject.should == "lah"
     end
   end
+
   context 'invalid string for popping' do
     it 'returns nil for empty string pop' do
       "".pop.should be_nil
@@ -67,7 +70,6 @@ describe 'function of whitespace skippiness' do
     callCount.should == 2
   end
 end
-
 
 describe Calculator do
   context 'with valid input' do
